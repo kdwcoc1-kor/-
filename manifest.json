@@ -1,0 +1,16 @@
+{
+  "name": "고흥귀농귀촌 — 고흥군귀농어귀촌협의회",
+  "short_name": "고흥귀농귀촌",
+  "description": "사단법인 고흥군귀농어귀촌협의회 공식 앱",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF7F0",
+  "theme_color": "#175B4E",
+  "lang": "ko",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
