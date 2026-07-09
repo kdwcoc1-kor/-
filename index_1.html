@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#175B4E">
+<meta name="description" content="사단법인 고흥군귀농어귀촌협의회 공식 앱 — 공지, 행사, 협의회 소개">
+<title>고흥귀농귀촌 | 고흥군귀농어귀촌협의회</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --sea:#175B4E; --sea-deep:#0E3F36; --sea-soft:#E4EFEB;
+  --yuzu:#EEA531; --yuzu-soft:#FDF3DF; --yuzu-deep:#8A5A0E;
+  --paper:#FAF7F0; --card:#FFFFFF; --ink:#243029; --ink-soft:#5C6B63; --ink-faint:#93A099;
+  --line:#E7E2D6; --coral:#C9573B; --coral-soft:#FAEAE4;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+  background:#EFEBE1; color:var(--ink); line-height:1.6; font-size:16px;
+}
+.shell{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--paper);
+  box-shadow:0 0 40px rgba(36,48,41,.08);display:flex;flex-direction:column}
+main{flex:1;padding-bottom:24px}
+.serif{font-family:'Gowun Batang','Nanum Myeongjo',serif}
+
+/* ── 상단 헤더 ── */
+header.top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 14px;background:var(--paper);position:sticky;top:0;z-index:20;
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .mark{width:34px;height:34px;border-radius:50%;background:var(--yuzu);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand .mark svg{width:20px;height:20px}
+.brand h1{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.brand small{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);letter-spacing:.02em}
+.install-btn{font-size:12px;border:1px solid var(--sea);color:var(--sea);background:none;
+  padding:6px 12px;border-radius:99px;cursor:pointer;display:none;font-family:inherit}
+
+/* ── 화면 전환 ── */
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}}
+
+/* ── 홈 히어로 ── */
+.hero{position:relative;background:var(--sea);color:#F3F7F5;overflow:hidden}
+.hero .txt{position:relative;z-index:2;padding:30px 22px 8px}
+.hero .eyebrow{font-size:12px;letter-spacing:.14em;color:#BFD9CF;margin-bottom:8px}
+.hero h2{font-size:24px;line-height:1.45;font-weight:700}
+.hero h2 .y{color:var(--yuzu)}
+.hero svg.scape{display:block;width:100%;height:auto;margin-top:-6px}
+.hero .sub{position:relative;z-index:2;padding:0 22px 22px;font-size:13.5px;color:#CDDFD8}
+
+.section{padding:22px 20px 4px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.sec-head h3{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sec-head h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--yuzu)}
+.sec-head a{font-size:13px;color:var(--sea);text-decoration:none;font-weight:500}
+
+/* ── 카드 공통 ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:10px}
+.card.tap{cursor:pointer;transition:border-color .15s}
+.card.tap:active{border-color:var(--sea)}
+
+/* ── 공지 ── */
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin-bottom:8px}
+.chip.c1{background:var(--sea-soft);color:var(--sea)}
+.chip.c2{background:var(--yuzu-soft);color:var(--yuzu-deep)}
+.chip.c3{background:var(--coral-soft);color:var(--coral)}
+.notice-title{font-size:15.5px;font-weight:600;line-height:1.5}
+.notice-meta{font-size:12.5px;color:var(--ink-faint);margin-top:6px}
+.pin{color:var(--coral);font-size:12px;font-weight:700;margin-right:4px}
+.filterbar{display:flex;gap:8px;padding:16px 20px 4px;flex-wrap:wrap}
+.filterbar button{font-family:inherit;font-size:13px;padding:7px 14px;border-radius:99px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer}
+.filterbar button.on{background:var(--sea);border-color:var(--sea);color:#fff;font-weight:600}
+
+/* ── 공지 상세 ── */
+.detail-head{padding:22px 20px 0}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--sea);
+  background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;margin-bottom:14px}
+.detail-title{font-size:20px;font-weight:700;line-height:1.5}
+.detail-body{padding:18px 20px;font-size:15.5px;white-space:pre-line;color:#333F39}
+
+/* ── 행사 ── */
+.cal-wrap{padding:18px 20px 0}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-nav h3{font-size:18px;font-weight:700}
+.cal-nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:var(--card);cursor:pointer;font-size:15px;color:var(--ink-soft)}
+table.cal{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cal th{font-size:12px;font-weight:600;color:var(--ink-faint);padding:10px 0;border-bottom:1px solid var(--line)}
+.cal th.sun{color:var(--coral)}
+.cal td{height:52px;text-align:center;vertical-align:top;padding-top:7px;font-size:13.5px;position:relative}
+.cal td.other{color:#C9CFC9}
+.cal td.sun{color:var(--coral)}
+.cal td.today .d{background:var(--sea);color:#fff;border-radius:50%;width:26px;height:26px;
+  display:inline-flex;align-items:center;justify-content:center}
+.cal td .dot{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;
+  width:6px;height:6px;border-radius:50%;background:var(--yuzu)}
+.evt-card{display:flex;gap:14px;align-items:flex-start}
+.evt-date{flex-shrink:0;width:52px;text-align:center;background:var(--sea-soft);border-radius:10px;padding:8px 0}
+.evt-date .m{font-size:11px;color:var(--sea);font-weight:600}
+.evt-date .d{font-size:20px;font-weight:700;color:var(--sea);line-height:1.2}
+.evt-info h4{font-size:15.5px;font-weight:600}
+.evt-info p{font-size:13px;color:var(--ink-soft);margin-top:3px}
+.evt-info .apply{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;
+  color:#fff;background:var(--sea);padding:7px 16px;border-radius:99px;text-decoration:none}
+.evt-info .apply.closed{background:var(--ink-faint);pointer-events:none}
+
+/* ── 소개 / 조직도 ── */
+.about-hero{padding:26px 22px 8px}
+.about-hero h2{font-size:21px;font-weight:700;line-height:1.5}
+.about-hero p{font-size:14.5px;color:var(--ink-soft);margin-top:10px}
+.greeting{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  margin:16px 20px;padding:20px;font-size:15px;line-height:1.85;color:#333F39}
+.greeting .sign{display:block;text-align:right;margin-top:14px;font-weight:700;font-size:14px}
+.org{padding:6px 20px 10px;text-align:center}
+.org .node{display:inline-block;background:var(--card);border:1.5px solid var(--sea);
+  border-radius:10px;padding:9px 20px;font-size:14px;font-weight:600}
+.org .node small{display:block;font-size:11.5px;font-weight:400;color:var(--ink-soft);margin-top:1px}
+.org .node.top{background:var(--sea);color:#fff}
+.org .node.top small{color:#BFD9CF}
+.org .vline{width:1.5px;height:16px;background:var(--sea);margin:0 auto}
+.org .row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.org .row .node{border-color:var(--line);font-weight:500;font-size:13px;padding:8px 12px;flex:1;min-width:0}
+.org .branch{position:relative;padding-top:16px}
+.org .branch::before{content:"";position:absolute;top:0;left:15%;right:15%;height:1.5px;background:var(--sea)}
+.org .branch .row>div{position:relative}
+.org .branch .row>div::before{content:"";position:absolute;top:-16px;left:50%;width:1.5px;height:16px;background:var(--sea)}
+.history{padding:6px 20px}
+.history .h-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.history .h-item:last-child{border-bottom:none}
+.history .yr{flex-shrink:0;font-weight:700;color:var(--sea);font-size:14.5px;width:48px}
+.history .tx{font-size:14.5px}
+.join{margin:10px 20px 24px;background:var(--yuzu-soft);border:1px solid #F0DCB4;border-radius:var(--r);padding:20px}
+.join h4{font-size:16px;font-weight:700;color:var(--yuzu-deep);margin-bottom:8px}
+.join p{font-size:14px;color:#6B5327;line-height:1.7}
+.join a{display:inline-block;margin-top:12px;background:var(--yuzu-deep);color:#fff;font-size:14px;
+  font-weight:600;padding:9px 20px;border-radius:99px;text-decoration:none}
+
+/* ── 홈 요약 위젯 ── */
+.home-banner{margin:16px 20px 0;background:var(--card);border:1px solid var(--line);
+  border-left:4px solid var(--yuzu);border-radius:0 var(--r) var(--r) 0;padding:14px 16px;cursor:pointer}
+.home-banner .lb{font-size:11.5px;font-weight:700;color:var(--yuzu-deep);letter-spacing:.06em}
+.home-banner .tt{font-size:14.5px;font-weight:600;margin-top:3px}
+.quicklinks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 20px 0}
+.quicklinks button{font-family:inherit;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:16px 6px 13px;cursor:pointer;text-align:center}
+.quicklinks .ic{font-size:22px;display:block;margin-bottom:6px}
+.quicklinks span{font-size:13px;font-weight:600;color:var(--ink)}
+.footer-note{padding:26px 22px 30px;font-size:12px;color:var(--ink-faint);line-height:1.7;text-align:center}
+
+/* ── 하단 탭 (sticky: 미리보기 iframe과 실기기 모두 안전) ── */
+nav.tabs{position:sticky;bottom:0;width:100%;
+  background:var(--paper);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 max(10px,env(safe-area-inset-bottom));z-index:30}
+nav.tabs button{font-family:inherit;background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-faint);padding:4px 0}
+nav.tabs button .t-ic{width:23px;height:23px}
+nav.tabs button .t-ic svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button span{font-size:11px;font-weight:600}
+nav.tabs button.on{color:var(--sea)}
+nav.tabs button.on .t-ic svg{stroke-width:2.2}
+:focus-visible{outline:2.5px solid var(--yuzu);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <div class="brand">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="7" fill="#FDF3DF"/><path d="M12 6c0-2 1.5-3.5 3-4" stroke="#175B4E" stroke-width="1.8" stroke-linecap="round"/><path d="M12 6c.8-1.2 2.4-1.6 3.8-1" stroke="#175B4E" stroke-width="0" fill="#3E7D5B" opacity="0"/><ellipse cx="14.6" cy="4.4" rx="2.4" ry="1.3" transform="rotate(-25 14.6 4.4)" fill="#3E7D5B"/></svg>
+    </div>
+    <h1>고흥귀농귀촌<small>사단법인 고흥군귀농어귀촌협의회</small></h1>
+  </div>
+  <button class="install-btn" id="installBtn">앱 설치</button>
+</header>
+
+<main>
+
+<!-- ════════ 홈 ════════ -->
+<section class="view active" id="view-home">
+  <div class="hero">
+    <div class="txt">
+      <p class="eyebrow">GOHEUNG · 귀농어귀촌</p>
+      <h2 class="serif">고흥에서 뿌리내리는<br>새 삶을 <span class="y">함께</span> 응원합니다</h2>
+    </div>
+    <svg class="scape" viewBox="0 0 480 130" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <circle cx="392" cy="46" r="26" fill="#EEA531"/>
+      <path d="M0 96 Q60 70 120 88 T240 84 T360 92 T480 82 V130 H0 Z" fill="#124A3F"/>
+      <path d="M0 108 Q80 92 160 104 T320 102 T480 106 V130 H0 Z" fill="#0E3F36"/>
+      <path d="M300 92 q10 -18 24 -20 q14 -2 20 12 l-6 8 z" fill="#0B342C"/>
+      <g fill="#0B342C"><rect x="70" y="78" width="3" height="18" rx="1.5"/><circle cx="71.5" cy="72" r="9"/></g>
+      <g fill="#0B342C"><rect x="150" y="84" width="3" height="16" rx="1.5"/><circle cx="151.5" cy="79" r="8"/></g>
+      <circle cx="66" cy="69" r="2.2" fill="#EEA531"/><circle cx="76" cy="74" r="2.2" fill="#EEA531"/><circle cx="72" cy="66" r="2.2" fill="#EEA531"/>
+      <circle cx="148" cy="76" r="2" fill="#EEA531"/><circle cx="155" cy="81" r="2" fill="#EEA531"/>
+    </svg>
+    <p class="sub">협의회 소식과 행사를 한 곳에서 확인하세요.</p>
+  </div>
+
+  <div class="home-banner" id="homeBanner" role="button" tabindex="0"></div>
+
+  <div class="quicklinks">
+    <button data-go="notice"><span class="ic">📢</span><span>공지사항</span></button>
+    <button data-go="events"><span class="ic">🗓️</span><span>행사 일정</span></button>
+    <button data-go="about"><span class="ic">🌱</span><span>협의회 소개</span></button>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><h3>다가오는 행사</h3><a href="#" data-go="events">전체 보기</a></div>
+    <div id="homeEvents"></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><h3>최근 공지</h3><a href="#" data-go="notice">전체 보기</a></div>
+    <div id="homeNotices"></div>
+  </div>
+
+  <p class="footer-note">
+    사단법인 고흥군귀농어귀촌협의회<br>
+    전라남도 고흥군 ○○면 ○○로 00 · 사무국 061-000-0000<br>
+    ghreturn@example.com
+  </p>
+</section>
+
+<!-- ════════ 공지사항 ════════ -->
+<section class="view" id="view-notice">
+  <div class="filterbar" id="noticeFilter">
+    <button data-cat="전체" class="on">전체</button>
+    <button data-cat="협의회">협의회</button>
+    <button data-cat="지원사업">지원사업</button>
+    <button data-cat="총회·회의">총회·회의</button>
+  </div>
+  <div class="section" id="noticeList"></div>
+</section>
+
+<!-- 공지 상세 -->
+<section class="view" id="view-noticeDetail">
+  <div class="detail-head">
+    <button class="back" data-go="notice">← 공지 목록</button>
+    <div id="detailChip"></div>
+    <h2 class="detail-title serif" id="detailTitle"></h2>
+    <p class="notice-meta" id="detailMeta"></p>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</section>
+
+<!-- ════════ 행사 ════════ -->
+<section class="view" id="view-events">
+  <div class="cal-wrap">
+    <div class="cal-nav">
+      <button id="calPrev" aria-label="이전 달">‹</button>
+      <h3 id="calTitle" class="serif"></h3>
+      <button id="calNext" aria-label="다음 달">›</button>
+    </div>
+    <table class="cal" id="calTable"></table>
+  </div>
+  <div class="section">
+    <div class="sec-head"><h3>행사 목록</h3></div>
+    <div id="eventList"></div>
+  </div>
+</section>
+
+<!-- ════════ 소개 ════════ -->
+<section class="view" id="view-about">
+  <div class="about-hero">
+    <h2 class="serif">먼저 온 이웃이<br>새로 온 이웃의 길잡이가 됩니다</h2>
+    <p>고흥군귀농어귀촌협의회는 고흥에 정착한 귀농·귀어·귀촌인들이 서로 돕고, 새로 오는 분들의 안정적인 정착을 지원하기 위해 설립된 사단법인입니다.</p>
+  </div>
+
+  <div class="greeting">
+    <strong class="serif" style="font-size:16px">회장 인사말</strong><br><br>
+    바다와 들이 넉넉한 고흥에서 새 삶을 시작하신 여러분을 환영합니다.
+    우리 협의회는 회원 여러분이 겪는 시행착오를 함께 나누고,
+    고흥살이의 지혜를 전하는 든든한 이웃이 되겠습니다.<br>
+    <span class="sign">회장 ○○○ 드림</span>
+  </div>
+
+  <div class="section"><div class="sec-head"><h3>조직도</h3></div></div>
+  <div class="org">
+    <div class="node top">회장<small>○○○</small></div>
+    <div class="vline"></div>
+    <div class="row" style="max-width:300px;margin:0 auto">
+      <div class="node" style="border-color:var(--sea)">부회장<small>○○○ · ○○○</small></div>
+      <div class="node" style="border-color:var(--coral)">감사<small>○○○ · ○○○</small></div>
+    </div>
+    <div class="vline"></div>
+    <div class="node">사무국<small>사무국장 ○○○</small></div>
+    <div class="branch">
+      <div class="row">
+        <div><div class="node">귀농분과<small>이사 ○○○</small></div></div>
+        <div><div class="node">귀어분과<small>이사 ○○○</small></div></div>
+        <div><div class="node">귀촌분과<small>이사 ○○○</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section"><div class="sec-head"><h3>연혁</h3></div></div>
+  <div class="history" id="historyList"></div>
+
+  <div class="join">
+    <h4>협의회 가입 안내</h4>
+    <p>고흥군에 전입한 귀농·귀어·귀촌인이라면 누구나 가입할 수 있습니다.
+    연회비 및 가입 절차는 사무국으로 문의해 주세요.</p>
+    <a href="tel:0610000000">사무국에 전화하기</a>
+  </div>
+</section>
+
+</main>
+
+<nav class="tabs" aria-label="주요 메뉴">
+  <button data-go="home" class="on"><span class="t-ic"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg></span><span>홈</span></button>
+  <button data-go="notice"><span class="t-ic"><svg viewBox="0 0 24 24"><path d="M18 8a3 3 0 0 1 0 6M10 8v11l-2-1-1-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h5l8-4v12l-8-4"/></svg></span><span>공지</span></button>
+  <button data-go="events"><span class="t-ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg></span><span>행사</span></button>
+  <button data-go="about"><span class="t-ic"><svg viewBox="0 0 24 24"><path d="M12 21c4-3.5 7-7 7-11a7 7 0 1 0-14 0c0 4 3 7.5 7 11z"/><path d="M9 10c1.5 2 4.5 2 6 0"/></svg></span><span>소개</span></button>
+</nav>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ★ 데이터 수정 구역 ★
+   사무국에서는 아래 목록만 고치면 됩니다. (코드는 건드리지 마세요)
+   - 새 공지를 맨 위에 추가하려면 { } 블록 하나를 복사해서 붙여넣으세요.
+   - 날짜는 반드시 "2026-07-06" 형식으로 적어 주세요.
+   - pinned: true 로 하면 공지 목록 맨 위에 고정됩니다.
+   ═══════════════════════════════════════════════════════════════ */
+
+const NOTICES = [
+  {
+    id: 1,
+    cat: "협의회",
+    pinned: true,
+    date: "2026-07-13",
+    title: "[긴급] 7/22 역량강화 워크숍 참석 인원 파악 관련 회의 안내",
+    body: `일시: 2026년 7월 13일(월요일)
+장소: 협의회 사무실
+대상: 집행부 전원, 각 읍·면 지회장, 임원
+
+안건
+오는 22일로 결정된 역량강화 워크숍 참석 인원 동원 및 사전 준비 관련
+
+각 지회 회장님들께서는 7월 22일 역량강화 워크숍 행사 참석 예상 인원을 파악하시어 명부를 작성하여 오시기 바랍니다.
+
+※ 각 지회별 최소 20명 이상`,
+  },
+];
+
+const EVENTS = [
+  {
+    date: "2026-07-22",
+    title: "역량강화 워크숍",
+    place: "고흥군청 1층 우주홀 (약 300명 수용 강당)",
+    time: "수요일 14시~16시 · 1부 사전·의전행사(40분), 2부 AI 활용 역량강화 교육(70분, AI전문강사 초청)",
+    applyUrl: "",
+  },
+  {
+    date: "2026-08-15",
+    title: "선진지 견학 (전남 남서부권)",
+    place: "전라남도 남서부권",
+    time: "대상 40명 · 일자 추후 확정",
+    applyUrl: "",
+  },
+  {
+    date: "2026-09-15",
+    title: "고흥군 귀농어귀촌인 단합대회",
+    place: "고흥군",
+    time: "예정 인원 300명 · 일자 추후 확정",
+    applyUrl: "",
+  },
+  {
+    date: "2026-10-15",
+    title: "전라남도 22개 시군 귀농귀촌인 교류행사",
+    place: "전라남도 22개 시군 (시군별 약 25명 참가)",
+    time: "총 참가 인원 1,000명 예상 · 일자 추후 확정",
+    applyUrl: "",
+  },
+];
+
+const HISTORY = [
+  { yr: "2019", tx: "고흥군귀농어귀촌협의회 창립총회" },
+  { yr: "2021", tx: "사단법인 설립 등기" },
+  { yr: "2023", tx: "귀농귀촌 박람회 고흥관 운영" },
+  { yr: "2025", tx: "회원 200명 돌파, 분과 체계 개편" },
+  { yr: "2026", tx: "협의회 공식 앱 「고흥귀농귀촌」 오픈" },
+];
+
+/* ═══════════════ 여기부터는 앱 코드 (수정 불필요) ═══════════════ */
+
+const $ = (s, p=document) => p.querySelector(s);
+const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+const fmt = d => { const [y,m,dd] = d.split("-"); return `${y}. ${+m}. ${+dd}.`; };
+const catClass = c => c === "지원사업" ? "c2" : c === "총회·회의" ? "c3" : "c1";
+const today = new Date(); today.setHours(0,0,0,0);
+
+/* 화면 전환 */
+function go(view){
+  $$(".view").forEach(v => v.classList.remove("active"));
+  $("#view-" + view).classList.add("active");
+  $$("nav.tabs button").forEach(b => b.classList.toggle("on",
+    b.dataset.go === (view === "noticeDetail" ? "notice" : view)));
+  window.scrollTo({top:0});
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-go]");
+  if(t){ e.preventDefault(); go(t.dataset.go); }
+});
+
+/* 공지 목록 */
+function sortedNotices(cat="전체"){
+  return NOTICES
+    .filter(n => cat === "전체" || n.cat === cat)
+    .sort((a,b) => (b.pinned - a.pinned) || b.date.localeCompare(a.date));
+}
+function noticeCard(n){
+  return `<div class="card tap" data-notice="${n.id}" role="button" tabindex="0">
+    <span class="chip ${catClass(n.cat)}">${n.cat}</span>
+    <p class="notice-title">${n.pinned ? '<span class="pin">고정</span>' : ""}${n.title}</p>
+    <p class="notice-meta">${fmt(n.date)}</p>
+  </div>`;
+}
+function renderNotices(cat="전체"){
+  $("#noticeList").innerHTML = sortedNotices(cat).map(noticeCard).join("")
+    || `<div class="card"><p class="notice-meta">해당 분류의 공지가 없습니다.</p></div>`;
+}
+$("#noticeFilter").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  $$("#noticeFilter button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); renderNotices(b.dataset.cat);
+});
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-notice]"); if(!c) return;
+  const n = NOTICES.find(x => x.id == c.dataset.notice); if(!n) return;
+  $("#detailChip").innerHTML = `<span class="chip ${catClass(n.cat)}">${n.cat}</span>`;
+  $("#detailTitle").textContent = n.title;
+  $("#detailMeta").textContent = fmt(n.date);
+  $("#detailBody").textContent = n.body;
+  go("noticeDetail");
+});
+
+/* 행사 달력 */
+let calY = today.getFullYear(), calM = today.getMonth();
+const evtDates = () => new Set(EVENTS.map(e => e.date));
+function renderCal(){
+  $("#calTitle").textContent = `${calY}년 ${calM+1}월`;
+  const first = new Date(calY, calM, 1);
+  const start = new Date(first); start.setDate(1 - first.getDay());
+  let html = "<tr>" + ["일","월","화","수","목","금","토"]
+    .map((d,i) => `<th class="${i===0?"sun":""}">${d}</th>`).join("") + "</tr>";
+  const dset = evtDates();
+  for(let w=0; w<6; w++){
+    html += "<tr>";
+    for(let d=0; d<7; d++){
+      const cur = new Date(start); cur.setDate(start.getDate() + w*7 + d);
+      const iso = `${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,"0")}-${String(cur.getDate()).padStart(2,"0")}`;
+      const cls = [
+        cur.getMonth() !== calM ? "other" : "",
+        d === 0 ? "sun" : "",
+        cur.getTime() === today.getTime() ? "today" : ""
+      ].join(" ");
+      html += `<td class="${cls}"><span class="d">${cur.getDate()}</span>${dset.has(iso) ? '<span class="dot"></span>' : ""}</td>`;
+    }
+    html += "</tr>";
+  }
+  $("#calTable").innerHTML = html;
+}
+$("#calPrev").onclick = () => { calM--; if(calM<0){calM=11;calY--;} renderCal(); };
+$("#calNext").onclick = () => { calM++; if(calM>11){calM=0;calY++;} renderCal(); };
+
+function evtCard(e){
+  const [y,m,d] = e.date.split("-");
+  const past = new Date(e.date) < today;
+  const btn = e.applyUrl
+    ? `<a class="apply ${past?"closed":""}" href="${e.applyUrl}" target="_blank" rel="noopener">${past?"접수 마감":"참가 신청"}</a>`
+    : "";
+  return `<div class="card evt-card">
+    <div class="evt-date"><p class="m">${+m}월</p><p class="d">${+d}</p></div>
+    <div class="evt-info"><h4>${e.title}</h4><p>${e.place} · ${e.time}</p>${btn}</div>
+  </div>`;
+}
+function renderEvents(){
+  const list = [...EVENTS].sort((a,b) => a.date.localeCompare(b.date));
+  $("#eventList").innerHTML = list.map(evtCard).join("")
+    || `<div class="card"><p class="notice-meta">등록된 행사가 없습니다.</p></div>`;
+}
+
+/* 홈 */
+function renderHome(){
+  const top = sortedNotices()[0];
+  if(top){
+    const b = $("#homeBanner");
+    b.dataset.notice = top.id;
+    b.innerHTML = `<p class="lb">알림</p><p class="tt">${top.title}</p>`;
+  }
+  const upcoming = [...EVENTS].filter(e => new Date(e.date) >= today)
+    .sort((a,b) => a.date.localeCompare(b.date)).slice(0,2);
+  $("#homeEvents").innerHTML = upcoming.map(evtCard).join("")
+    || `<div class="card"><p class="notice-meta">예정된 행사가 없습니다.</p></div>`;
+  $("#homeNotices").innerHTML = sortedNotices().slice(0,3).map(noticeCard).join("");
+}
+
+/* 연혁 */
+$("#historyList").innerHTML = HISTORY.map(h =>
+  `<div class="h-item"><span class="yr">${h.yr}</span><span class="tx">${h.tx}</span></div>`).join("");
+
+/* PWA 설치 버튼 + 서비스워커 */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); deferredPrompt = e;
+  $("#installBtn").style.display = "inline-block";
+});
+$("#installBtn").onclick = async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt(); await deferredPrompt.userChoice;
+  deferredPrompt = null; $("#installBtn").style.display = "none";
+};
+if("serviceWorker" in navigator && location.protocol === "https:")
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+renderNotices(); renderCal(); renderEvents(); renderHome();
+</script>
+</body>
+</html>
