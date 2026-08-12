@@ -118,6 +118,7 @@ table.cal{width:100%;border-collapse:collapse;background:var(--card);border:1px 
 .evt-info .apply{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;
   color:#fff;background:var(--sea);padding:7px 16px;border-radius:99px;text-decoration:none}
 .evt-info .apply.closed{background:var(--ink-faint);pointer-events:none}
+.evt-info .evt-more{margin-top:8px;font-size:12.5px;color:var(--sea);font-weight:600}
 
 /* ── 소개 / 조직도 ── */
 .about-hero{padding:26px 22px 8px}
@@ -258,6 +259,17 @@ nav.tabs button.on .t-ic svg{stroke-width:2.2}
   <div class="detail-body" id="detailBody"></div>
 </section>
 
+<!-- 행사 상세 -->
+<section class="view" id="view-eventDetail">
+  <div class="detail-head">
+    <button class="back" data-go="events">← 행사 목록</button>
+    <h2 class="detail-title serif" id="evtDetailTitle"></h2>
+    <p class="notice-meta" id="evtDetailMeta"></p>
+  </div>
+  <div class="detail-body" id="evtDetailBody"></div>
+  <div style="padding:0 20px 24px" id="evtDetailApply"></div>
+</section>
+
 <!-- ════════ 행사 ════════ -->
 <section class="view" id="view-events">
   <div class="cal-wrap">
@@ -366,13 +378,53 @@ const EVENTS = [
     place: "고흥군청 1층 우주홀 (약 300명 수용 강당)",
     time: "수요일 14시~16시 · 1부 사전·의전행사(40분), 2부 AI 활용 역량강화 교육(70분, AI전문강사 초청)",
     applyUrl: "",
+    desc: `회원 여러분의 역량 강화를 위한 워크숍을 개최합니다.
+
+■ 일시
+· 2026년 7월 22일(수) 14시~16시
+
+■ 장소
+· 고흥군청 1층 우주홀 (약 300명 수용 강당)
+
+■ 세부 일정
+· 1부 사전·의전행사 (40분)
+· 2부 AI 활용 역량강화 교육 (70분, AI전문강사 초청)
+
+많은 참여 부탁드립니다.`,
   },
   {
-    date: "2026-08-15",
-    title: "선진지 견학 (전남 남서부권)",
-    place: "전라남도 남서부권",
-    time: "대상 40명 · 일자 추후 확정",
+    date: "2026-08-13",
+    title: "선진지 견학 (영암·함평)",
+    place: "고흥군청 앞 주차장 집결 · 영암 서울농장, 함평 지역 견학",
+    time: "목요일 오전 7시 출발 · 출발 10분 전까지 집결",
     applyUrl: "",
+    desc: `회원 여러분의 역량 강화와 귀농·귀촌 우수사례 벤치마킹을 위해 선진지 견학을 실시합니다.
+
+■ 일시
+· 2026년 8월 13일(목)
+· 오전 7시 출발
+
+■ 출발 장소
+· 고흥군청 앞 주차장
+
+■ 견학 코스
+· 영암 서울농장 방문
+· 우수 귀농 성공농가 견학 및 사례 발표
+· 함평 지역 우수 농업 현장 견학
+
+■ 주요 내용
+· 서울농장 운영 사례 및 귀농·귀촌 정책 벤치마킹
+· 우수 귀농인의 성공 사례 청취 및 질의응답
+· 지역 특화농업과 농촌 활성화 사례 견학
+· 회원 간 정보 교류 및 화합
+
+■ 안내 사항
+· 출발 시간 10분 전까지 집결해 주시기 바랍니다.
+· 편안한 복장과 운동화를 착용해 주시기 바랍니다.
+· 개인 상비약은 각자 준비해 주시기 바랍니다.
+· 안전하고 즐거운 견학을 위해 진행요원의 안내에 협조해 주시기 바랍니다.
+
+이번 선진지 견학을 통해 다양한 우수사례를 배우고, 고흥군 귀농어귀촌 발전에 도움이 되는 뜻깊은 시간이 되기를 바랍니다.`,
   },
   {
     date: "2026-09-15",
@@ -380,6 +432,15 @@ const EVENTS = [
     place: "고흥군",
     time: "예정 인원 300명 · 일자 추후 확정",
     applyUrl: "",
+    desc: `고흥군 귀농어귀촌인이 함께 모이는 단합대회입니다.
+
+■ 예정 인원
+· 약 300명
+
+■ 장소
+· 고흥군 (세부 장소 추후 확정)
+
+세부 일정과 프로그램은 확정되는 대로 공지사항을 통해 안내드리겠습니다.`,
   },
   {
     date: "2026-10-15",
@@ -387,6 +448,16 @@ const EVENTS = [
     place: "전라남도 22개 시군 (시군별 약 25명 참가)",
     time: "총 참가 인원 1,000명 예상 · 일자 추후 확정",
     applyUrl: "",
+    desc: `전라남도 22개 시군 귀농귀촌인이 한자리에 모이는 대규모 교류행사입니다.
+
+■ 참가 규모
+· 시군별 약 25명, 총 1,000명 예상
+
+■ 목적
+· 시군 간 귀농귀촌 정보 교류
+· 우수사례 공유 및 네트워크 형성
+
+세부 일정은 확정되는 대로 안내드리겠습니다.`,
   },
 ];
 
@@ -410,8 +481,9 @@ const today = new Date(); today.setHours(0,0,0,0);
 function go(view){
   $$(".view").forEach(v => v.classList.remove("active"));
   $("#view-" + view).classList.add("active");
-  $$("nav.tabs button").forEach(b => b.classList.toggle("on",
-    b.dataset.go === (view === "noticeDetail" ? "notice" : view)));
+  const activeTab = view === "noticeDetail" ? "notice"
+    : view === "eventDetail" ? "events" : view;
+  $$("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.go === activeTab));
   window.scrollTo({top:0});
 }
 document.addEventListener("click", e => {
@@ -451,6 +523,20 @@ document.addEventListener("click", e => {
   go("noticeDetail");
 });
 
+/* 행사 상세 열기 */
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-event]"); if(!c) return;
+  const ev = EVENTS[+c.dataset.event]; if(!ev || !ev.desc) return;
+  const past = new Date(ev.date) < today;
+  $("#evtDetailTitle").textContent = ev.title;
+  $("#evtDetailMeta").textContent = `${fmt(ev.date)} · ${ev.place}`;
+  $("#evtDetailBody").textContent = ev.desc;
+  $("#evtDetailApply").innerHTML = ev.applyUrl
+    ? `<a class="apply ${past?"closed":""}" href="${ev.applyUrl}" target="_blank" rel="noopener">${past?"접수 마감":"참가 신청"}</a>`
+    : "";
+  go("eventDetail");
+});
+
 /* 행사 달력 */
 let calY = today.getFullYear(), calM = today.getMonth();
 const evtDates = () => new Set(EVENTS.map(e => e.date));
@@ -483,12 +569,14 @@ $("#calNext").onclick = () => { calM++; if(calM>11){calM=0;calY++;} renderCal();
 function evtCard(e){
   const [y,m,d] = e.date.split("-");
   const past = new Date(e.date) < today;
+  const idx = EVENTS.indexOf(e);
   const btn = e.applyUrl
-    ? `<a class="apply ${past?"closed":""}" href="${e.applyUrl}" target="_blank" rel="noopener">${past?"접수 마감":"참가 신청"}</a>`
+    ? `<a class="apply ${past?"closed":""}" href="${e.applyUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${past?"접수 마감":"참가 신청"}</a>`
     : "";
-  return `<div class="card evt-card">
+  const more = e.desc ? `<p class="evt-more">자세히 보기 ›</p>` : "";
+  return `<div class="card evt-card tap" data-event="${idx}" role="button" tabindex="0">
     <div class="evt-date"><p class="m">${+m}월</p><p class="d">${+d}</p></div>
-    <div class="evt-info"><h4>${e.title}</h4><p>${e.place} · ${e.time}</p>${btn}</div>
+    <div class="evt-info"><h4>${e.title}</h4><p>${e.place} · ${e.time}</p>${btn}${more}</div>
   </div>`;
 }
 function renderEvents(){
